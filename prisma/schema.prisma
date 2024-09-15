@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  name                  String?
+  clerkId               String    @unique
+  created               DateTime  @default(now())
+  updated               DateTime  @updatedAt
+  subscriptionLevel     String    @default("free")
+  isSubscriptionActive  Boolean   @default(true)
+  privacyConsent        Boolean   @default(false)
+  language              String    @default("en")
+  storageUsage          Int       @default(0) // in bytes
+  deletedAt             DateTime?
+  fineTunedModels       FineTunedModel[]
+  uploadedImages        UploadedImage[]
+  subscription          Subscription?
+  apiUsage              ApiUsage?
+  feedback              Feedback[]
+}
+
+model FineTunedModel {
+  id             String   @id @default(cuid())
+  modelId        String   @unique
+  modelName      String
+  fineTuneJobId  String
+  status         String
+  mode           String
+  createdAt      DateTime
+  updatedAt      DateTime
+  engineId       String
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+  feedback       Feedback[]
+}
+
+model UploadedImage {
+  id        String   @id @default(cuid())
+  url       String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model Subscription {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  stripeCustomerId     String   @unique
+  stripePriceId        String?
+  stripeSubscriptionId String?
+  status               String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  user                 User     @relation(fields: [userId], references: [id])
+}
+
+model ApiUsage {
+  id            String   @id @default(cuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String   @unique
+  callCount     Int      @default(0)
+  lastResetDate DateTime @default(now())
+}
+
+model WebhookEvent {
+  id        String   @id @default(cuid())
+  type      String
+  payload   Json
+  createdAt DateTime @default(now())
+}
+
+model Job {
+  id        String   @id @default(cuid())
+  type      String
+  status    String
+  payload   Json
+  result    Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  details   Json
+  createdAt DateTime @default(now())
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  userId    String
+  modelId   String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  model     FineTunedModel @relation(fields: [modelId], references: [id])
+}
