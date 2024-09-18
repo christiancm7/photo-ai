@@ -15,7 +15,6 @@ import {
   SidebarBody,
   SidebarFooter,
   SidebarHeader,
-  SidebarHeading,
   SidebarItem,
   SidebarLabel,
   SidebarSection,
@@ -25,20 +24,22 @@ import { SidebarLayout } from '@/components/sidebar-layout'
 import { getEvents } from '@/data'
 import { UserButton, useUser } from '@clerk/nextjs'
 import {
+  AdjustmentsHorizontalIcon,
   ArrowRightStartOnRectangleIcon,
+  BarsArrowUpIcon,
+  ChatBubbleBottomCenterTextIcon,
   ChevronDownIcon,
-  Cog8ToothIcon,
   LightBulbIcon,
-  PlusIcon,
+  PhotoIcon,
   ShieldCheckIcon,
   UserCircleIcon,
 } from '@heroicons/react/16/solid'
 import {
+  CircleStackIcon,
   Cog6ToothIcon,
   HomeIcon,
   QuestionMarkCircleIcon,
   Square2StackIcon,
-  TicketIcon,
 } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
 
@@ -96,7 +97,7 @@ export function ApplicationLayout({
                 <SidebarLabel>Catalyst</SidebarLabel>
                 <ChevronDownIcon />
               </DropdownButton>
-              <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
+              {/* <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
                 <DropdownItem href="/settings">
                   <Cog8ToothIcon />
                   <DropdownLabel>Settings</DropdownLabel>
@@ -115,23 +116,36 @@ export function ApplicationLayout({
                   <PlusIcon />
                   <DropdownLabel>New team&hellip;</DropdownLabel>
                 </DropdownItem>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </Dropdown>
           </SidebarHeader>
 
           <SidebarBody>
             <SidebarSection>
-              <SidebarItem href="/" current={pathname === '/'}>
+              <SidebarItem href="/app/overview" current={pathname.startsWith('/app/overview')}>
                 <HomeIcon />
-                <SidebarLabel>Home</SidebarLabel>
+                <SidebarLabel>Overview</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="/bgremove" current={pathname.startsWith('/bgremove')}>
+              <SidebarItem href="/app/text-to-image" current={pathname.startsWith('/app/text-to-image')}>
+                <ChatBubbleBottomCenterTextIcon />
+                <SidebarLabel>Text to image</SidebarLabel>
+              </SidebarItem>
+              <SidebarItem href="/app/image-to-image" current={pathname.startsWith('/app/image-to-image')}>
+                <PhotoIcon />
+                <SidebarLabel>Image to image</SidebarLabel>
+              </SidebarItem>
+              <SidebarItem href="/app/upscaling" current={pathname.startsWith('/app/upscaling')}>
+                <BarsArrowUpIcon />
+                <SidebarLabel>Upscaling</SidebarLabel>
+              </SidebarItem>
+              <SidebarItem href="/app/fine-tuning" current={pathname.startsWith('/app/fine-tuning')}>
+                <AdjustmentsHorizontalIcon />
+                <SidebarLabel>Fine tuning</SidebarLabel>
+              </SidebarItem>
+
+              <SidebarItem href="/app/bgremove" current={pathname.startsWith('/app/bgremove')}>
                 <Square2StackIcon />
                 <SidebarLabel>Background Remover</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="/orders" current={pathname.startsWith('/orders')}>
-                <TicketIcon />
-                <SidebarLabel>Orders</SidebarLabel>
               </SidebarItem>
               {/* <SidebarItem href="/settings" current={pathname.startsWith('/settings')}>
                 <Cog6ToothIcon />
@@ -139,23 +153,27 @@ export function ApplicationLayout({
               </SidebarItem> */}
             </SidebarSection>
 
-            <SidebarSection className="max-lg:hidden">
+            {/* <SidebarSection className="max-lg:hidden">
               <SidebarHeading>Upcoming Events</SidebarHeading>
               {events.map((event) => (
                 <SidebarItem key={event.id} href={event.url}>
                   {event.name}
                 </SidebarItem>
               ))}
-            </SidebarSection>
+            </SidebarSection> */}
 
             <SidebarSpacer />
 
             <SidebarSection>
+              <SidebarItem href="/app/models" current={pathname.startsWith('/app/models')}>
+                <CircleStackIcon />
+                <SidebarLabel>Models</SidebarLabel>
+              </SidebarItem>
               <SidebarItem href="#">
                 <QuestionMarkCircleIcon />
                 <SidebarLabel>Support</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="/settings" current={pathname.startsWith('/settings')}>
+              <SidebarItem href="/app/settings" current={pathname.startsWith('/app/settings')}>
                 <Cog6ToothIcon />
                 <SidebarLabel>Settings</SidebarLabel>
               </SidebarItem>

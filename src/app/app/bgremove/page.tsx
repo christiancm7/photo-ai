@@ -1,8 +1,8 @@
 'use client'
 
+import { ApplicationLayout } from '@/app/application-layout'
 import { Heading } from '@/components/heading'
 import { useState } from 'react'
-import { ApplicationLayout } from '../application-layout'
 
 export default function Page() {
   const [originalImage, setOriginalImage] = useState<string | null>(null)
